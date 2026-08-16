@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title id="pageTitle">سووڕی مانگانە</title>
+<meta name="description" content="ئەپڵیکەیشنی کوردی تایبەت بە شوێنکەوتن و پێشبینیکردنی سووڕی مانگانە، بە تەواوی سەربەخۆ و بەبێ ئینتەرنێت." />
+<link id="favicon" rel="icon" href="" />
+<style>
+  :root{
+    --pink-50:#FFF1F2; --pink-100:#FEE2E2; --pink-500:#E11D48; --pink-600:#D64D64; --pink-700:#BE123C;
+    --bg:#FEF7F7; --text:#2D2D2D; --card:#FFFFFF; --border:#FEE2E2; --muted:#78716c; --muted-2:#a8a29e;
+    --emerald-bg:#ecfdf5; --emerald-text:#065f46; --emerald-border:#a7f3d0;
+    --amber:#f59e0b; --rose-100:#ffe4e6; --rose-200:#fecdd3;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:Tahoma,'Segoe UI','Noto Sans Arabic','Geeza Pro',Arial,sans-serif;
+    background:var(--bg); color:var(--text); -webkit-tap-highlight-color:transparent;
+    min-height:100vh;
+  }
+  button{font-family:inherit; cursor:pointer;}
+  input,textarea{font-family:inherit;}
+  .app{min-height:100vh; display:flex; flex-direction:column; padding-bottom:96px;}
+  .header{position:sticky; top:0; z-index:30; background:rgba(254,247,247,.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--border); padding:14px 16px;}
+  .header-inner{max-width:720px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-icon{width:40px; height:40px; border-radius:16px; background:var(--pink-50); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--pink-600); flex-shrink:0;}
+  .brand-title{font-weight:800; font-size:16px; margin:0;}
+  .brand-sub{font-size:11px; color:var(--muted); margin:0; font-weight:500;}
+  .btn{border:none; border-radius:16px; font-weight:700; font-size:13px; padding:10px 16px; transition:background .15s, transform .1s;}
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--pink-600); color:#fff;}
+  .btn-primary:hover{background:var(--pink-700);}
+  .btn-ghost{background:#fff; border:1px solid var(--border); color:var(--pink-600);}
+  .btn-ghost:hover{background:var(--pink-50);}
+  .btn-block{width:100%; display:flex; align-items:center; justify-content:center; gap:8px;}
+  main{max-width:720px; margin:0 auto; width:100%; padding:20px 16px 0; display:flex; flex-direction:column; gap:20px;}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:32px; padding:24px; box-shadow:0 1px 2px rgba(0,0,0,.03);}
+  .card-header{display:flex; align-items:center; justify-content:space-between; gap:12px; border-bottom:1px solid var(--border); padding-bottom:14px; margin-bottom:16px;}
+  h3{font-size:16px; font-weight:800; margin:0;}
+  p{margin:0;}
+  .text-xs{font-size:12px;}
+  .text-muted{color:var(--muted);}
+  .dial-wrap{display:flex; flex-direction:column; align-items:center; text-align:center;}
+  .dial{position:relative; width:230px; height:230px; margin:8px 0;}
+  .dial svg{transform:rotate(-90deg);}
+  .dial-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .dial-label{font-size:12px; font-weight:700; color:var(--muted-2);}
+  .dial-num{font-size:44px; font-weight:900; color:var(--pink-600); margin:2px 0;}
+  .dial-of{font-size:12px; font-weight:700;}
+  .feedback{padding:14px; background:var(--emerald-bg); border:1px solid var(--emerald-border); color:var(--emerald-text); font-size:12px; font-weight:700; border-radius:16px; display:flex; align-items:center; gap:8px;}
+  .badge{padding:2px 10px; border-radius:999px; font-size:11px; font-weight:700; border:1px solid var(--emerald-border); background:var(--emerald-bg); color:var(--emerald-text);}
+  .pill{background:#FAF1F2; padding:4px 12px; border-radius:16px; border:1px solid var(--border); font-size:12px; color:var(--pink-600); font-weight:700; white-space:nowrap;}
+  .grid3{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:600px){.grid3{grid-template-columns:repeat(3,1fr);}}
+  .stat{padding:16px; border-radius:16px; border:1px solid var(--border); background:#fff;}
+  .stat.tint{background:rgba(250,241,242,.6);}
+  .stat-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
+  .stat-label{font-size:12px; font-weight:700; color:#44403c;}
+  .stat-chip{font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; color:var(--pink-600);}
+  .stat-main{font-size:12px; font-weight:800;}
+  .stat-sub{font-size:11px; color:var(--muted); margin-top:2px;}
+  .toggle-row{display:flex; align-items:center; justify-content:space-between; width:100%; background:none; border:none; padding:6px 0; font-size:12px; font-weight:700; color:var(--text);}
+  .future-grid{display:grid; grid-template-columns:1fr; gap:10px; margin-top:12px;}
+  @media(min-width:520px){.future-grid{grid-template-columns:1fr 1fr;}}
+  .future-item{padding:14px; border-radius:16px; background:rgba(250,241,242,.4); border:1px solid var(--border); font-size:12px;}
+  .future-item .row{display:flex; justify-content:space-between; font-weight:700; color:var(--pink-600);}
+  .day-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:8px; text-align:center; font-size:12px;}
+  .day-head{font-size:11px; font-weight:700; color:var(--muted-2); padding:4px 0;}
+  .day-cell{padding:10px 2px; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid transparent; background:rgba(250,241,242,.4); color:#44403c; gap:3px;}
+  .day-cell .dot{width:6px; height:6px; border-radius:999px; background:var(--amber);}
+  .day-today{background:var(--pink-600); color:#fff; font-weight:800;}
+  .day-period{background:var(--rose-100); color:var(--pink-600); font-weight:800; border-color:var(--rose-200);}
+  .day-fertile{background:var(--emerald-bg); color:var(--emerald-text); border-color:var(--emerald-border);}
+  .legend{display:flex; flex-wrap:wrap; gap:16px; justify-content:center; padding-top:12px; border-top:1px solid var(--border); font-size:11px; color:var(--muted);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .dot-lg{width:12px; height:12px; border-radius:999px; display:inline-block;}
+  .hist-item{padding:14px; border-radius:16px; background:rgba(250,241,242,.5); border:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; font-size:12px;}
+  .hist-item .date{font-weight:800; font-size:13px;}
+  .hist-item .meta{color:var(--muted); font-size:11px; margin-top:2px;}
+  .icon-btn{background:none; border:none; padding:8px; border-radius:12px; color:var(--muted-2);}
+  .icon-btn:hover{background:#fff; color:#b91c1c;}
+  .settings-block{background:rgba(250,241,242,.7); border:1px solid var(--border); border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:8px;}
+  .settings-title{display:flex; align-items:center; gap:8px; font-weight:800; font-size:12px;}
+  .slider-row{margin-bottom:16px;}
+  .slider-top{display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#44403c; margin-bottom:4px;}
+  .slider-top span.val{color:var(--pink-600);}
+  input[type=range]{width:100%; accent-color:var(--pink-600);}
+  .switch-row{display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border);}
+  .switch-row:last-child{border-bottom:none;}
+  .switch-label{font-size:12px; font-weight:700;}
+  .switch-desc{font-size:11px; color:var(--muted); margin-top:2px; max-width:80%;}
+  .switch{position:relative; width:42px; height:24px; border-radius:999px; background:#e7e5e4; border:none; flex-shrink:0;}
+  .switch.on{background:var(--pink-600);}
+  .switch::after{content:''; position:absolute; top:3px; right:3px; width:18px; height:18px; border-radius:999px; background:#fff; transition:transform .15s;}
+  .switch.on::after{transform:translateX(-18px);}
+  .field{width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border); font-size:12px; background:#fff;}
+  .field:focus{outline:2px solid var(--pink-600); outline-offset:1px;}
+  .row-2{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .modal-overlay{position:fixed; inset:0; z-index:50; background:rgba(28,25,23,.6); backdrop-filter:blur(2px); display:flex; align-items:center; justify-content:center; padding:16px;}
+  .modal{background:#fff; width:100%; max-width:420px; border-radius:32px; padding:24px; border:1px solid var(--border); max-height:90vh; overflow-y:auto; display:flex; flex-direction:column; gap:16px;}
+  .modal-head{display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:12px;}
+  .modal-close{background:none; border:none; color:var(--muted-2); font-weight:800; font-size:15px;}
+  .flow-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:12px;}
+  .flow-btn{padding:10px 4px; border-radius:12px; border:1px solid var(--border); background:#fff; color:#44403c; font-weight:700; font-size:12px;}
+  .flow-btn.active{background:var(--pink-600); color:#fff; border-color:var(--pink-600);}
+  textarea.field{resize:vertical;}
+  .bottom-nav{position:fixed; bottom:12px; left:0; right:0; z-index:40; display:flex; justify-content:center; padding:0 16px;}
+  .bottom-nav-inner{background:rgba(255,255,255,.96); backdrop-filter:blur(6px); border-radius:999px; border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,.08); padding:6px; display:flex; align-items:center; justify-content:space-around; gap:2px; max-width:420px; width:100%;}
+  .nav-btn{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:8px 10px; border-radius:999px; background:none; border:none; color:var(--muted-2);}
+  .nav-btn.active{color:var(--pink-600); background:var(--pink-50);}
+  .nav-btn span{font-size:10px; font-weight:700;}
+  /* Onboarding & lock screens */
+  .full-screen{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px;}
+  .onb-card{max-width:420px; width:100%; background:#fff; border:1px solid var(--border); border-radius:32px; padding:32px 28px; text-align:center; display:flex; flex-direction:column; gap:18px;}
+  .onb-icon{width:64px; height:64px; border-radius:20px; background:var(--pink-50); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--pink-600); margin:0 auto;}
+  .onb-title{font-size:18px; font-weight:900;}
+  .onb-text{font-size:13px; color:var(--muted); line-height:1.7;}
+  .dots{display:flex; justify-content:center; gap:6px; margin-top:4px;}
+  .step-dot{width:6px; height:6px; border-radius:999px; background:var(--border);}
+  .step-dot.on{background:var(--pink-600); width:18px;}
+  .keypad{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:280px; margin:0 auto; width:100%;}
+  .key{padding:18px 0; font-size:20px; font-weight:800; border-radius:20px; background:#fff; border:1px solid var(--border); color:var(--text);}
+  .key:active{background:var(--pink-50);}
+  .pin-dots{display:flex; justify-content:center; gap:12px; margin:8px 0;}
+  .pin-dot{width:14px; height:14px; border-radius:999px; border:2px solid var(--pink-600); background:transparent;}
+  .pin-dot.filled{background:var(--pink-600);}
+  .pin-error{color:var(--pink-700); font-size:12px; font-weight:700; min-height:16px;}
+  .link-btn{background:none; border:none; color:var(--pink-600); font-size:12px; font-weight:700; text-decoration:underline;}
+  .stack{display:flex; flex-direction:column; gap:12px;}
+  @media(prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function(){
+"use strict";
+
+/* ---------------- ICONS ---------------- */
+var ICONS = {
+  droplet:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>',
+  droplet_o:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>',
+  calendar:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  sparkles:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>',
+  plus:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  lock:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+  settings:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+  history:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>',
+  book:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  note:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>',
+  check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  trash:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  download:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  backspace:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>',
+  shield:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+};
+function icon(name){ return ICONS[name] || ''; }
+
+/* ---------------- KURDISH UTILS ---------------- */
+var KURDISH_DIGITS = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+var KURDISH_SOLAR_MONTHS = ['خاکەلێوە','گوڵان','جۆزەردان','پووشپەڕ','گەلاوێژ','خەرمانان','ڕەزبەر','گەڵاڕێزان','سەرماوەز','بەفرانبار','ڕێبەندان','ڕەشەمە'];
+var KURDISH_WEEKDAYS = ['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];
+
+function formatKurdishNumber(num, useKurdish){
+  if(num===null||num===undefined) return '';
+  var str = String(num);
+  if(!useKurdish) return str;
+  return str.replace(/\d/g, function(d){ return KURDISH_DIGITS[parseInt(d,10)]; });
+}
+function toISODateString(date){
+  var d = new Date(date);
+  var year = d.getFullYear();
+  var month = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return year+'-'+month+'-'+day;
+}
+function addDaysToDate(dateStr, days){
+  var p = dateStr.split('-').map(Number);
+  var dt = new Date(p[0], p[1]-1, p[2]);
+  dt.setDate(dt.getDate()+days);
+  return toISODateString(dt);
+}
+function getDaysDifference(startStr, endStr){
+  var a = startStr.split('-').map(Number), b = endStr.split('-').map(Number);
+  var d1 = new Date(a[0],a[1]-1,a[2]), d2 = new Date(b[0],b[1]-1,b[2]);
+  return Math.round((d2.getTime()-d1.getTime())/86400000);
+}
+function formatKurdishDate(dateStr, opts){
+  if(!dateStr) return '';
+  opts = opts || {};
+  var includeDayName = opts.includeDayName, short = opts.short, useKurdishDigits = opts.useKurdishDigits !== false;
+  var p = dateStr.split('-').map(Number);
+  var dt = new Date(p[0], p[1]-1, p[2]);
+  var dayName = KURDISH_WEEKDAYS[dt.getDay()];
+  var monthName = KURDISH_SOLAR_MONTHS[p[1]-1];
+  var dayNum = formatKurdishNumber(p[2], useKurdishDigits);
+  var yearNum = formatKurdishNumber(p[0], useKurdishDigits);
+  if(short) return dayNum+'ی '+monthName;
+  if(includeDayName) return dayName+'، '+dayNum+'ی '+monthName+'ی '+yearNum;
+  return dayNum+'ی '+monthName+'ی '+yearNum;
+}
+
+/* ---------------- PREDICTION ENGINE (unchanged logic) ---------------- */
+function calculatePredictions(cycles, settings, todayStr){
+  todayStr = todayStr || toISODateString(new Date());
+  var fallbackCycle = settings.averageCycleLength || 28;
+  var fallbackPeriod = settings.averagePeriodDuration || 5;
+  var luteal = settings.lutealPhaseDuration || 14;
+
+  var sortedDesc = cycles.slice().sort(function(a,b){ return b.startDate.localeCompare(a.startDate); });
+  var sortedAsc = cycles.slice().sort(function(a,b){ return a.startDate.localeCompare(b.startDate); });
+
+  var intervals = [];
+  for(var i=0;i<sortedAsc.length-1;i++){
+    var diff = getDaysDifference(sortedAsc[i].startDate, sortedAsc[i+1].startDate);
+    if(diff>=18 && diff<=65) intervals.push(diff);
+  }
+  var durations = [];
+  sortedDesc.forEach(function(c){
+    var dur = c.periodDuration;
+    if(!dur && c.endDate) dur = Math.max(1, getDaysDifference(c.startDate, c.endDate)+1);
+    if(dur && dur>=1 && dur<=14) durations.push(dur);
+  });
+
+  var predictedCycle = fallbackCycle, variance = 0;
+  if(intervals.length>0){
+    var rev = intervals.slice().reverse();
+    var totalW=0,sumW=0;
+    rev.forEach(function(val,idx){ var w=Math.max(1,4-idx); sumW+=val*w; totalW+=w; });
+    predictedCycle = Math.round(sumW/totalW);
+    var mean = intervals.reduce(function(a,b){return a+b;},0)/intervals.length;
+    variance = intervals.reduce(function(s,v){return s+Math.pow(v-mean,2);},0)/intervals.length;
+  }
+  var predictedDuration = fallbackPeriod;
+  if(durations.length>0){
+    var tW=0,sW=0;
+    durations.forEach(function(d,idx){ var w=Math.max(1,3-idx); sW+=d*w; tW+=w; });
+    predictedDuration = Math.max(1, Math.round(sW/tW));
+  }
+  var stdDev = Math.sqrt(variance);
+  var confidenceScore=70, confidenceLevel='low';
+  var confidenceText = 'پێشبینییەکە بەپێی کاتی پێوانەیی دیاریکراوە. بە تۆمارکردنی سووڕی زیاتر وردتر دەبێت.';
+  if(sortedDesc.length>=4 && stdDev<=2.5){
+    confidenceScore=96; confidenceLevel='high';
+    confidenceText = 'پێشبینیی زۆر ورد بەپێی چەندین سووڕی ڕابردووت (تێکڕا: '+predictedCycle+' ڕۆژ).';
+  } else if(sortedDesc.length>=3 && stdDev<=3.5){
+    confidenceScore=90; confidenceLevel='high';
+    confidenceText = 'پێشبینیی باوەڕپێکراو بەپێی ٣ سووڕی ڕابردووت.';
+  } else if(sortedDesc.length>=2){
+    confidenceScore = stdDev>4 ? 75 : 84; confidenceLevel='medium';
+    confidenceText = stdDev>4 ? 'سووڕەکانت کەمێک ناڕێکییان تێدایە، پێشبینی نزیکترین کات دیاریدەکات.' : 'پێشبینیی مامناوەند بەپێی سووڕە تۆمارکراوەکانت.';
+  } else if(sortedDesc.length===1){
+    confidenceScore=78; confidenceLevel='medium';
+    confidenceText = 'پێشبینیی سەرەتایی بەپێی ١ سووڕی تۆمارکراو.';
+  }
+
+  var baseStart = sortedDesc[0] ? sortedDesc[0].startDate : todayStr;
+  var cycleOffset=1;
+  var testNext = addDaysToDate(baseStart, predictedCycle);
+  var guard=0;
+  while(getDaysDifference(testNext, todayStr) > predictedDuration+7 && guard<500){
+    testNext = addDaysToDate(testNext, predictedCycle);
+    cycleOffset++; guard++;
+  }
+  var nextPeriodStart = addDaysToDate(baseStart, cycleOffset*predictedCycle);
+  var nextPeriodEnd = addDaysToDate(nextPeriodStart, predictedDuration-1);
+  var ovulationDate = addDaysToDate(nextPeriodStart, -luteal);
+  var fertileWindowStart = addDaysToDate(ovulationDate, -5);
+  var fertileWindowEnd = addDaysToDate(ovulationDate, 1);
+  var daysUntilNextPeriod = getDaysDifference(todayStr, nextPeriodStart);
+
+  var futureCycles = [];
+  for(var k=1;k<=4;k++){
+    var fStart = addDaysToDate(baseStart, (cycleOffset+k-1)*predictedCycle);
+    var fEnd = addDaysToDate(fStart, predictedDuration-1);
+    var fNextStart = addDaysToDate(fStart, predictedCycle);
+    var fOv = addDaysToDate(fNextStart, -luteal);
+    futureCycles.push({
+      cycleIndex:k, startDate:fStart, endDate:fEnd, ovulationDate:fOv,
+      fertileWindowStart:addDaysToDate(fOv,-5), fertileWindowEnd:addDaysToDate(fOv,1),
+      periodDuration:predictedDuration, cycleLength:predictedCycle
+    });
+  }
+  return {
+    nextPeriodStart:nextPeriodStart, nextPeriodEnd:nextPeriodEnd, periodDuration:predictedDuration,
+    cycleLength:predictedCycle, ovulationDate:ovulationDate, fertileWindowStart:fertileWindowStart,
+    fertileWindowEnd:fertileWindowEnd, daysUntilNextPeriod:daysUntilNextPeriod, confidenceScore:confidenceScore,
+    confidenceLevel:confidenceLevel, confidenceText:confidenceText, basedOnCyclesCount:sortedDesc.length,
+    varianceDays:Math.round(stdDev*10)/10, futureCycles:futureCycles
+  };
+}
+
+/* ---------------- STATE ---------------- */
+var DEFAULT_SETTINGS = {
+  averageCycleLength:28, averagePeriodDuration:5, lutealPhaseDuration:14,
+  useKurdishNumerals:true, isPinLockEnabled:false, pinCode:'',
+  isDiscreetModeEnabled:false, discreetLabel:'تێبینیەکان', onboarded:false
+};
+function loadJSON(key, fallback){
+  try{ var raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
+  catch(e){ return fallback; }
+}
+function saveJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+
+var S = {
+  settings: Object.assign({}, DEFAULT_SETTINGS, loadJSON('kurdish_pt_settings', {})),
+  cycles: loadJSON('kurdish_pt_cycles', []),
+  dailyLogs: loadJSON('kurdish_pt_logs', {}),
+  view: 'onboarding',        // onboarding | lock | app
+  onboardStep: 0,
+  onboardDraft: { lastStart:'', cycleLen:28, periodLen:5, skip:false },
+  activeTab: 'home',
+  selectedDate: toISODateString(new Date()),
+  isLogModalOpen: false,
+  showFutureForecast: false,
+  feedback: '',
+  pinInput: '',
+  pinError: '',
+  pinSetupStage: null,        // null | 'new' | 'confirm'
+  pinSetupFirst: '',
+  sessionUnlocked: false
+};
+if(S.settings.onboarded){
+  S.view = (S.settings.isPinLockEnabled) ? 'lock' : 'app';
+}
+
+function persist(){
+  saveJSON('kurdish_pt_settings', S.settings);
+  saveJSON('kurdish_pt_cycles', S.cycles);
+  saveJSON('kurdish_pt_logs', S.dailyLogs);
+}
+function todayStr(){ return toISODateString(new Date()); }
+function kNum(n){ return formatKurdishNumber(n, S.settings.useKurdishNumerals); }
+function showNotice(msg){
+  S.feedback = msg;
+  render();
+  setTimeout(function(){ S.feedback=''; var el=document.getElementById('feedbackBox'); if(el) el.remove(); }, 3500);
+}
+
+/* Apply discreet mode to tab title / favicon (cheap privacy touch: only affects
+   what shows in the browser tab / bookmark, not a true OS home-screen icon) */
+function applyChrome(){
+  var discreet = S.settings.isDiscreetModeEnabled;
+  var title = discreet ? (S.settings.discreetLabel || 'تێبینیەکان') : 'سووڕی مانگانە';
+  document.getElementById('pageTitle').textContent = title;
+  var svg = discreet
+    ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23787066" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+    : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23D64D64"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>';
+  document.getElementById('favicon').setAttribute('href', 'data:image/svg+xml,'+svg);
+}
+
+/* ---------------- RENDER DISPATCH ---------------- */
+function render(){
+  applyChrome();
+  var root = document.getElementById('root');
+  if(S.view==='onboarding'){ root.innerHTML = renderOnboarding(); return; }
+  if(S.view==='lock'){ root.innerHTML = renderLock(); focusNothing(); return; }
+  root.innerHTML = renderApp();
+}
+function focusNothing(){}
+
+/* ================= ONBOARDING ================= */
+function renderOnboarding(){
+  var step = S.onboardStep;
+  var dots = [0,1,2].map(function(i){ return '<span class="step-dot '+(i===step?'on':'')+'"></span>'; }).join('');
+  var body = '';
+  if(step===0){
+    body = ''+
+      '<div class="onb-icon">'+icon('droplet')+'</div>'+
+      '<div class="onb-title">بەخێربێیت</div>'+
+      '<p class="onb-text">ئەم ئەپڵیکەیشنە یارمەتیت دەدات شوێنکەوتنی سووڕی مانگانەت بکەیت و پێشبینی بکەیت. هەموو زانیارییەکانت تەنها لەسەر مۆبایلەکەی خۆت هەڵدەگیرێت — هیچ هەژمار، هیچ ئینتەرنێت، هیچ سێرڤەرێک پێویست ناکات.</p>'+
+      '<button class="btn btn-primary btn-block" onclick="obNext()">دەستپێکردن '+icon('check')+'</button>';
+  } else if(step===1){
+    var d = S.onboardDraft;
+    body = ''+
+      '<div class="onb-icon">'+icon('calendar')+'</div>'+
+      '<div class="onb-title">دەستپێکی دوایین سووڕت</div>'+
+      '<p class="onb-text">ئەگەر بزانیت، بەرواری دەستپێکی دوایین خوێنبەربوونت بنووسە بۆ ئەوەی یەکەم پێشبینی بۆت دروست بکەین.</p>'+
+      '<div class="stack">'+
+      '<input type="date" class="field" id="obDate" value="'+d.lastStart+'" onchange="S.onboardDraft.lastStart=this.value" max="'+todayStr()+'" />'+
+      '<div class="row-2">'+
+        '<div><div class="text-xs text-muted" style="margin-bottom:4px;">تێکڕای ماوەی سووڕ</div><input type="number" min="18" max="60" class="field" value="'+d.cycleLen+'" onchange="S.onboardDraft.cycleLen=parseInt(this.value||28,10)" /></div>'+
+        '<div><div class="text-xs text-muted" style="margin-bottom:4px;">ماوەی خوێنبەربوون</div><input type="number" min="1" max="14" class="field" value="'+d.periodLen+'" onchange="S.onboardDraft.periodLen=parseInt(this.value||5,10)" /></div>'+
+      '</div>'+
+      '</div>'+
+      '<button class="btn btn-primary btn-block" onclick="obNext()">دواتر '+icon('check')+'</button>'+
+      '<button class="link-btn" onclick="obSkip()">هێشتا نازانم، دواتر پڕی دەکەمەوە</button>';
+  } else {
+    body = ''+
+      '<div class="onb-icon">'+icon('shield')+'</div>'+
+      '<div class="onb-title">پاراستنی تایبەتێتی</div>'+
+      '<p class="onb-text">دەتوانیت قوفڵی PIN چالاک بکەیت و ناوی دیوانی ئەپەکە بگۆڕیت بۆ شاراوەیی زیاتر. هەموو ئەمانە دواتریش لە ڕێکخستنەکانەوە دەگۆڕدرێن.</p>'+
+      '<button class="btn btn-primary btn-block" onclick="finishOnboarding()">تەواو، بمبە بۆ ئەپەکە '+icon('check')+'</button>';
+  }
+  return ''+
+    '<div class="full-screen"><div class="onb-card">'+body+'<div class="dots">'+dots+'</div></div></div>';
+}
+function obNext(){
+  if(S.onboardStep===1){
+    var d = S.onboardDraft;
+    if(d.lastStart){
+      S.cycles = [{ id:'c_'+Date.now(), startDate:d.lastStart, endDate:addDaysToDate(d.lastStart,(d.periodLen||5)-1), cycleLength:d.cycleLen||28, periodDuration:d.periodLen||5 }];
+    }
+    S.settings.averageCycleLength = d.cycleLen || 28;
+    S.settings.averagePeriodDuration = d.periodLen || 5;
+  }
+  S.onboardStep++;
+  render();
+}
+function obSkip(){ S.onboardStep++; render(); }
+function finishOnboarding(){
+  S.settings.onboarded = true;
+  persist();
+  S.view = 'app';
+  render();
+}
+
+/* ================= LOCK SCREEN ================= */
+function renderLock(){
+  var dots = [0,1,2,3].map(function(i){ return '<span class="pin-dot '+(i<S.pinInput.length?'filled':'')+'"></span>'; }).join('');
+  var keys = ['1','2','3','4','5','6','7','8','9','','0','⌫'];
+  var keysHtml = keys.map(function(k){
+    if(k==='') return '<span></span>';
+    if(k==='⌫') return '<button class="key" onclick="pinBackspace()">'+icon('backspace')+'</button>';
+    return '<button class="key" onclick="pinPress(\''+k+'\')">'+k+'</button>';
+  }).join('');
+  var discreet = S.settings.isDiscreetModeEnabled;
+  var title = discreet ? (S.settings.discreetLabel||'تێبینیەکان') : 'قوفڵکراوە';
+  return ''+
+    '<div class="full-screen"><div class="onb-card">'+
+      '<div class="onb-icon">'+icon(discreet?'note':'lock')+'</div>'+
+      '<div class="onb-title">'+title+'</div>'+
+      '<p class="onb-text">کۆدی ژمارە بنووسە بۆ کردنەوە</p>'+
+      '<div class="pin-dots">'+dots+'</div>'+
+      '<div class="pin-error">'+(S.pinError||'&nbsp;')+'</div>'+
+      '<div class="keypad">'+keysHtml+'</div>'+
+    '</div></div>';
+}
+function pinPress(d){
+  if(S.pinInput.length>=4) return;
+  S.pinInput += d;
+  S.pinError = '';
+  if(S.pinInput.length===4){
+    if(S.pinInput === S.settings.pinCode){
+      S.sessionUnlocked = true;
+      S.pinInput=''; S.view='app';
+      render();
+    } else {
+      S.pinError = 'کۆدەکە هەڵەیە، دووبارە هەوڵبدەوە';
+      var wrong = S.pinInput;
+      render();
+      setTimeout(function(){ if(S.pinInput===wrong){ S.pinInput=''; render(); } }, 500);
+      return;
+    }
+  }
+  render();
+}
+function pinBackspace(){ S.pinInput = S.pinInput.slice(0,-1); render(); }
+
+/* ================= MAIN APP ================= */
+function renderApp(){
+  var discreet = S.settings.isDiscreetModeEnabled;
+  var headerTitle = discreet ? (S.settings.discreetLabel||'تێبینیەکان') : 'سووڕی مانگانە';
+  var headerSub = discreet ? 'داتا و تێبینی کەسی' : 'تەندروستی و پێشبینیکردنی ژیرانەی سووڕ';
+  var headerIcon = discreet ? 'note' : 'droplet';
+
+  var html = '<div class="app">';
+  html += '<header class="header"><div class="header-inner">';
+  html += '<div class="brand"><div class="brand-icon">'+icon(headerIcon)+'</div><div><p class="brand-title">'+headerTitle+'</p><p class="brand-sub">'+headerSub+'</p></div></div>';
+  html += '<button class="btn btn-ghost" onclick="openLogModal(\''+todayStr()+'\')" style="display:flex;align-items:center;gap:6px;">'+icon('plus')+'<span>تۆماری ئەمڕۆ</span></button>';
+  html += '</div></header>';
+
+  html += '<main>';
+  if(S.feedback){
+    html += '<div class="feedback" id="feedbackBox">'+icon('check')+'<span>'+S.feedback+'</span></div>';
+  }
+  if(S.activeTab==='home') html += renderHome();
+  if(S.activeTab==='calendar') html += renderCalendar();
+  if(S.activeTab==='history') html += renderHistory();
+  if(S.activeTab==='tips') html += renderTips();
+  if(S.activeTab==='settings') html += renderSettings();
+  html += '</main>';
+
+  if(S.isLogModalOpen) html += renderLogModal();
+
+  html += renderNav();
+  html += '</div>';
+  return html;
+}
+
+function getPrediction(){ return calculatePredictions(S.cycles, S.settings, todayStr()); }
+function getLatestCycle(){ return S.cycles.slice().sort(function(a,b){return b.startDate.localeCompare(a.startDate);})[0]; }
+
+function renderHome(){
+  var prediction = getPrediction();
+  var latest = getLatestCycle();
+  var daysSinceStart = latest ? Math.max(1, getDaysDifference(latest.startDate, todayStr())+1) : 1;
+  var isBleedingToday = !!latest && daysSinceStart <= (prediction.periodDuration||5);
+  var circumference = 264;
+  var pct = Math.min(daysSinceStart, prediction.cycleLength)/prediction.cycleLength;
+  var offset = circumference - circumference*pct;
+
+  var html = '<div class="stack">';
+  html += '<div class="card dial-wrap">';
+  html += '<div class="dial"><svg width="230" height="230" viewBox="0 0 220 220">'+
+    '<circle cx="110" cy="110" r="95" stroke="#FEE2E2" stroke-width="14" fill="none"/>'+
+    '<circle cx="110" cy="110" r="95" stroke="#D64D64" stroke-width="14" fill="none" stroke-linecap="round" '+
+    'stroke-dasharray="'+(2*Math.PI*95)+'" stroke-dashoffset="'+((2*Math.PI*95)*(1-pct))+'" style="transition:stroke-dashoffset .5s;"/>'+
+    '</svg><div class="dial-center">'+
+    '<span class="dial-label">'+(isBleedingToday?'خوێنبەربوون':'ڕۆژی سووڕ')+'</span>'+
+    '<span class="dial-num">'+kNum(daysSinceStart)+'</span>'+
+    '<span class="dial-of">لە '+kNum(prediction.cycleLength)+' ڕۆژ</span>'+
+    '</div></div>';
+  html += '<button class="btn btn-primary btn-block" style="max-width:360px;padding:14px 20px;" onclick="togglePeriodToday()">'+icon('droplet_o')+'<span>'+(isBleedingToday?'خوێنبەربوونی ئەمڕۆ چالاکە':'تۆمارکردنی دەستپێکی سووڕی ئەمڕۆ')+'</span></button>';
+  html += '</div>';
+
+  html += '<div class="card">';
+  html += '<div class="card-header"><div class="brand"><div class="brand-icon">'+icon('sparkles')+'</div><div>'+
+    '<div style="display:flex;align-items:center;gap:8px;"><h3>پێشبینیی سووڕ و پیتاندن</h3><span class="badge">'+kNum(prediction.confidenceScore)+'٪ متمانە</span></div>'+
+    '<p class="text-xs text-muted">'+prediction.confidenceText+'</p></div></div>'+
+    '<div class="pill">'+(prediction.daysUntilNextPeriod>0 ? (kNum(prediction.daysUntilNextPeriod)+' ڕۆژی تر ماوە') : 'ئەمڕۆ کاتی سووڕە')+'</div></div>';
+
+  html += '<div class="grid3">';
+  html += '<div class="stat tint"><div class="stat-top"><span class="stat-label">سووڕی داهاتوو</span><span class="stat-chip">'+kNum(prediction.periodDuration)+' ڕۆژ</span></div>'+
+    '<div class="stat-main">دەستپێک: <span style="color:var(--pink-600)">'+formatKurdishDate(prediction.nextPeriodStart,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</span></div>'+
+    '<div class="stat-sub">کۆتایی: '+formatKurdishDate(prediction.nextPeriodEnd,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</div></div>';
+  html += '<div class="stat"><div class="stat-top"><span class="stat-label">پەنجەرەی پیتاندن</span><span class="badge">ئەگەری سکپڕبوون</span></div>'+
+    '<div class="stat-main">'+formatKurdishDate(prediction.fertileWindowStart,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+' تا '+formatKurdishDate(prediction.fertileWindowEnd,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</div>'+
+    '<div class="stat-sub">ماوەی ٦ ڕۆژ لە بەرزترین ئەگەری پیتاندن</div></div>';
+  html += '<div class="stat"><div class="stat-top"><span class="stat-label">ڕۆژی هێلکەدانان</span><span class="stat-chip">لووتکە</span></div>'+
+    '<div class="stat-main">'+formatKurdishDate(prediction.ovulationDate,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</div>'+
+    '<div class="stat-sub">١٤ ڕۆژ پێش دەستپێکی سووڕ</div></div>';
+  html += '</div>';
+
+  html += '<div style="padding-top:8px;border-top:1px solid var(--border);margin-top:16px;">'+
+    '<button class="toggle-row" onclick="toggleForecast()"><span style="display:flex;align-items:center;gap:8px;">'+icon('calendar')+'<span>پێشبینیی ٤ سووڕی داهاتوو (بۆ پلاندانان)</span></span><span style="color:var(--pink-600)">'+(S.showFutureForecast?'داخستن':'پیشاندان')+'</span></button>';
+  if(S.showFutureForecast){
+    html += '<div class="future-grid">';
+    prediction.futureCycles.forEach(function(fc){
+      html += '<div class="future-item"><div class="row"><span>سووڕی '+kNum(fc.cycleIndex)+'</span><span class="text-muted" style="font-weight:400;">'+kNum(fc.periodDuration)+' ڕۆژ خوێن</span></div>'+
+        '<div style="margin-top:4px;">بەروار: '+formatKurdishDate(fc.startDate,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+' تا '+formatKurdishDate(fc.endDate,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</div>'+
+        '<div class="text-muted" style="margin-top:2px;">هێلکەدانان: '+formatKurdishDate(fc.ovulationDate,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</div></div>';
+    });
+    html += '</div>';
+  }
+  html += '</div></div></div>';
+  return html;
+}
+
+function renderCalendar(){
+  var prediction = getPrediction();
+  var html = '<div class="card">';
+  html += '<div class="card-header"><h3>ڕۆژژمێر و تۆماری ڕۆژانە</h3><span class="text-xs text-muted">'+formatKurdishDate(todayStr(),{includeDayName:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</span></div>';
+  html += '<p class="text-xs text-muted" style="margin-bottom:12px;">کلیک لەسەر هەر ڕۆژێک بکە بۆ تۆمارکردنی نیشانەکان، ئازار، میزاج و زانیارییەکانی تر:</p>';
+  html += '<div class="day-grid">';
+  KURDISH_WEEKDAYS.forEach(function(wd){ html += '<div class="day-head">'+wd[0]+'</div>'; });
+  for(var idx=0; idx<28; idx++){
+    var dStr = addDaysToDate(todayStr(), idx-14);
+    var isToday = dStr===todayStr();
+    var hasLog = !!S.dailyLogs[dStr];
+    var isNextPeriod = dStr>=prediction.nextPeriodStart && dStr<=prediction.nextPeriodEnd;
+    var isFertile = dStr>=prediction.fertileWindowStart && dStr<=prediction.fertileWindowEnd;
+    var cls = 'day-cell';
+    if(isToday) cls += ' day-today'; else if(isNextPeriod) cls += ' day-period'; else if(isFertile) cls += ' day-fertile';
+    html += '<button class="'+cls+'" onclick="openLogModal(\''+dStr+'\')"><span>'+kNum(dStr.split('-')[2])+'</span>'+(hasLog?'<span class="dot"></span>':'')+'</button>';
+  }
+  html += '</div>';
+  html += '<div class="legend">'+
+    '<span><span class="dot-lg" style="background:var(--pink-600)"></span>ئەمڕۆ</span>'+
+    '<span><span class="dot-lg" style="background:var(--rose-200)"></span>سووڕی پێشبینیکراو</span>'+
+    '<span><span class="dot-lg" style="background:var(--emerald-border)"></span>پەنجەرەی پیتاندن</span>'+
+    '<span><span class="dot-lg" style="width:8px;height:8px;background:var(--amber)"></span>نیشانەی تۆمارکراو</span>'+
+    '</div></div>';
+  return html;
+}
+
+function renderHistory(){
+  var sorted = S.cycles.slice().sort(function(a,b){return b.startDate.localeCompare(a.startDate);});
+  var html = '<div class="card">';
+  html += '<div class="card-header"><h3>مێژووی سووڕەکان</h3><span class="text-xs" style="color:var(--pink-600);font-weight:700;">'+kNum(S.cycles.length)+' سووڕی تۆمارکراو</span></div>';
+  if(sorted.length===0){
+    html += '<p class="text-xs text-muted">هێشتا هیچ سووڕێک تۆمار نەکراوە. لە سەرەتا کرتە لەسەر "تۆمارکردنی دەستپێکی سووڕی ئەمڕۆ" بکە.</p>';
+  } else {
+    html += '<div class="stack">';
+    sorted.forEach(function(c){
+      html += '<div class="hist-item"><div><div class="date">'+formatKurdishDate(c.startDate,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+
+        '<span class="text-muted" style="font-weight:400;margin:0 6px;">تا</span>'+formatKurdishDate(c.endDate,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</div>'+
+        '<div class="meta">درێژی سووڕ: '+kNum(c.cycleLength||28)+' ڕۆژ | خوێنبەربوون: '+kNum(c.periodDuration||5)+' ڕۆژ</div></div>'+
+        '<button class="icon-btn" onclick="deleteCycle(\''+c.id+'\')">'+icon('trash')+'</button></div>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderTips(){
+  return ''+
+    '<div class="stack">'+
+    '<div class="card"><h3 style="margin-bottom:10px;">قۆناغەکانی سووڕی مانگانە چیین؟</h3>'+
+    '<p class="text-xs text-muted" style="line-height:1.8;">سووڕی مانگانە لە ٤ قۆناغی سەرەکی پێکدێت: قۆناغی خوێنبەربوون (ڕۆژی ١-٥)، قۆناغی فۆلیکۆلار (گۆڕانی هۆرمۆنەکان و ئامادەکاری هێلکە)، قۆناغی هێلکەدانان (ڕۆژی ١٤ - بەرزترین ئەگەری پیتاندن)، و قۆناغی لوتیاڵ (ئامادەکاری منداڵدان).</p></div>'+
+    '<div class="card"><h3 style="margin-bottom:10px;">چۆن پێشبینییەکە کار دەکات؟</h3>'+
+    '<p class="text-xs text-muted" style="line-height:1.8;">ئەم ئەپڵیکەیشنە شێوازی کێشراوی وەزندارکراو بەکاردەهێنێت. هەرچەندە سووڕی زیاتر تۆمار بکەیت، پێشبینیی ڕۆژی دەستپێک و پەنجەرەی پیتاندنەکەت زیاتر لە پێوانەی گشتی بەرەو تایبەتمەندییە بایۆلۆژییەکانی جەستەت ورد دەبێتەوە.</p></div>'+
+    '<div class="card"><h3 style="margin-bottom:10px;">تێبینی گرنگ</h3>'+
+    '<p class="text-xs text-muted" style="line-height:1.8;">ئەم ئەپڵیکەیشنە تەنها بۆ شوێنکەوتنە و جێگرەوەی ڕاوێژی پزیشکی نییە. ئەگەر گومانت هەیە، پزیشکێک ببینە.</p></div>'+
+    '</div>';
+}
+
+function renderSettings(){
+  var s = S.settings;
+  var html = '<div class="stack">';
+
+  html += '<div class="card"><h3 style="margin-bottom:16px;">ڕێکخستنی سووڕ</h3>';
+  html += '<div class="slider-row"><div class="slider-top"><span>تێکڕای ماوەی سووڕ (ڕۆژ)</span><span class="val" id="cycleLenVal">'+kNum(s.averageCycleLength)+' ڕۆژ</span></div>'+
+    '<input type="range" min="20" max="45" value="'+s.averageCycleLength+'" oninput="liveSlider(\'cycleLenVal\', this.value, \' ڕۆژ\')" onchange="commitSetting(\'averageCycleLength\', parseInt(this.value,10))" /></div>';
+  html += '<div class="slider-row"><div class="slider-top"><span>ماوەی خوێنبەربوون (ڕۆژ)</span><span class="val" id="periodLenVal">'+kNum(s.averagePeriodDuration)+' ڕۆژ</span></div>'+
+    '<input type="range" min="2" max="10" value="'+s.averagePeriodDuration+'" oninput="liveSlider(\'periodLenVal\', this.value, \' ڕۆژ\')" onchange="commitSetting(\'averagePeriodDuration\', parseInt(this.value,10))" /></div>';
+  html += '<div class="switch-row"><div><div class="switch-label">ژمارەی کوردی</div><div class="switch-desc">پیشاندانی ژمارەکان بە ئارقامی کوردی (٠١٢٣) لە جیاتی لاتینی</div></div>'+
+    '<button class="switch '+(s.useKurdishNumerals?'on':'')+'" onclick="toggleSetting(\'useKurdishNumerals\')"></button></div>';
+  html += '</div>';
+
+  html += '<div class="card"><h3 style="margin-bottom:4px;">تایبەتێتی و پاراستن</h3>';
+  html += '<div class="switch-row"><div><div class="switch-label">قوفڵی PIN</div><div class="switch-desc">داواکردنی کۆدی ٤ ژمارەیی هەر جارێک ئەپەکە دەکرێتەوە</div></div>'+
+    '<button class="switch '+(s.isPinLockEnabled?'on':'')+'" onclick="togglePinLock()"></button></div>';
+  if(S.pinSetupStage){
+    html += '<div class="settings-block"><div class="settings-title">'+icon('lock')+'<span>'+(S.pinSetupStage==='new' ? 'کۆدێکی ٤ ژمارەیی نوێ دابنێ' : 'کۆدەکە دووبارە بنووسەوە')+'</span></div>'+
+      '<input type="tel" inputmode="numeric" maxlength="4" class="field" id="pinSetupInput" placeholder="••••" oninput="handlePinSetupInput(this.value)" />'+
+      '<div class="pin-error">'+(S.pinError||'&nbsp;')+'</div></div>';
+  } else if(s.isPinLockEnabled && s.pinCode){
+    html += '<button class="link-btn" onclick="startPinChange()">گۆڕینی کۆد</button>';
+  }
+  html += '<div class="switch-row" style="margin-top:8px;"><div><div class="switch-label">دۆخی شاراوە</div><div class="switch-desc">ناو و ئایکۆنی ئەپەکە دەگۆڕدرێت بۆ شتێکی ئاسایی و نائاشکرا</div></div>'+
+    '<button class="switch '+(s.isDiscreetModeEnabled?'on':'')+'" onclick="toggleSetting(\'isDiscreetModeEnabled\')"></button></div>';
+  if(s.isDiscreetModeEnabled){
+    html += '<div style="margin-top:8px;"><div class="text-xs text-muted" style="margin-bottom:4px;">ناوی شاراوە</div>'+
+      '<input type="text" class="field" value="'+s.discreetLabel+'" onchange="commitSetting(\'discreetLabel\', this.value||\'تێبینیەکان\')" /></div>';
+  }
+  html += '</div>';
+
+  html += '<div class="card"><h3 style="margin-bottom:4px;">داتا</h3>';
+  html += '<div class="settings-block"><div class="settings-title">'+icon('download')+'<span>داگرتنی کۆدی تەواو وەکو فایلی سەربەخۆی HTML</span></div>'+
+    '<p class="text-xs text-muted">ئەم فایلە بە تەواوی سەربەخۆیە — هیچ سکریپت یان فۆنتێکی دەرەکی بانگ ناکات، بۆیە دەتوانیت بەبێ ئینتەرنێت لەسەر هەر مۆبایل یان کۆمپیوتەرێک بیکەیتەوە.</p>'+
+    '<button class="btn btn-primary btn-block" onclick="exportStandaloneHTML()">داگرتنی فایلی تەواو</button></div>';
+  html += '<button class="btn btn-block" style="margin-top:12px;background:#fff;border:1px solid #fecaca;color:#b91c1c;" onclick="resetAllData()">'+icon('trash')+'<span>سڕینەوەی هەموو داتاکان</span></button>';
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function renderLogModal(){
+  var d = S.selectedDate;
+  var log = S.dailyLogs[d] || {};
+  var flows = ['هیچ','کەم','مامناوەند','زۆر'];
+  var flowBtns = flows.map(function(f){
+    return '<button class="flow-btn '+(log.flow===f?'active':'')+'" onclick="setFlow(\''+f+'\')">'+f+'</button>';
+  }).join('');
+  return ''+
+    '<div class="modal-overlay" onclick="if(event.target===this) closeLogModal()">'+
+    '<div class="modal">'+
+    '<div class="modal-head"><h3>تۆماری ڕۆژی '+formatKurdishDate(d,{short:true,useKurdishDigits:S.settings.useKurdishNumerals})+'</h3>'+
+    '<button class="modal-close" onclick="closeLogModal()">✕</button></div>'+
+    '<div><div class="text-xs" style="font-weight:700;margin-bottom:6px;">خوێنبەربوون</div><div class="flow-grid">'+flowBtns+'</div></div>'+
+    '<div><div class="text-xs" style="font-weight:700;margin-bottom:6px;">تێبینی تایبەت</div>'+
+    '<textarea class="field" rows="3" placeholder="هەر هەستێک یان نیشانەیەک بنووسە..." onblur="setNote(this.value)">'+(log.note||'')+'</textarea></div>'+
+    '<button class="btn btn-primary btn-block" onclick="closeLogModal()">داخستن و پاشەکەوت</button>'+
+    '</div></div>';
+}
+
+function renderNav(){
+  var tabs = [
+    {id:'home', label:'سەرەتا', icon:'droplet_o'},
+    {id:'calendar', label:'ڕۆژمێر', icon:'calendar'},
+    {id:'history', label:'مێژوو', icon:'history'},
+    {id:'tips', label:'زانیاری', icon:'book'},
+    {id:'settings', label:'ڕێکخستن', icon:'settings'}
+  ];
+  var html = '<nav class="bottom-nav"><div class="bottom-nav-inner">';
+  tabs.forEach(function(t){
+    html += '<button class="nav-btn '+(S.activeTab===t.id?'active':'')+'" onclick="setTab(\''+t.id+'\')">'+icon(t.icon)+'<span>'+t.label+'</span></button>';
+  });
+  html += '</div></nav>';
+  return html;
+}
+
+/* ---------------- HANDLERS ---------------- */
+window.setTab = function(id){ S.activeTab = id; S.showFutureForecast = false; render(); };
+window.openLogModal = function(dateStr){ S.selectedDate = dateStr; S.isLogModalOpen = true; render(); };
+window.closeLogModal = function(){ S.isLogModalOpen = false; render(); persist(); showNotice('نیشانەکانی ئەمڕۆ پاشەکەوت کران.'); };
+window.setFlow = function(f){
+  var d = S.selectedDate;
+  S.dailyLogs[d] = Object.assign({}, S.dailyLogs[d]||{}, {flow:f});
+  render();
+};
+window.setNote = function(v){
+  var d = S.selectedDate;
+  S.dailyLogs[d] = Object.assign({}, S.dailyLogs[d]||{}, {note:v});
+};
+window.toggleForecast = function(){ S.showFutureForecast = !S.showFutureForecast; render(); };
+window.togglePeriodToday = function(){
+  var prediction = getPrediction();
+  var latest = getLatestCycle();
+  var daysSinceStart = latest ? Math.max(1, getDaysDifference(latest.startDate, todayStr())+1) : 1;
+  var isBleedingToday = !!latest && daysSinceStart <= (prediction.periodDuration||5);
+  if(isBleedingToday){
+    showNotice('سووڕی مانگانەت وەک چالاک تۆمارکراوە.');
+  } else {
+    var newCycle = { id:'c_'+Date.now(), startDate:todayStr(), endDate:addDaysToDate(todayStr(), (prediction.periodDuration||5)-1), cycleLength:prediction.cycleLength||28, periodDuration:prediction.periodDuration||5 };
+    S.cycles = [newCycle].concat(S.cycles);
+    persist();
+    showNotice('دەستپێکی سووڕی نوێ بۆ ئەمڕۆ تۆمارکرا!');
+  }
+};
+window.deleteCycle = function(id){
+  if(!confirm('دڵنیایت لە سڕینەوەی ئەم سووڕە؟')) return;
+  S.cycles = S.cycles.filter(function(c){ return c.id!==id; });
+  persist();
+  showNotice('سووڕەکە سڕایەوە.');
+};
+window.liveSlider = function(labelId, val, suffix){
+  document.getElementById(labelId).textContent = kNum(val)+suffix;
+};
+window.commitSetting = function(key, val){
+  S.settings[key] = val;
+  persist();
+};
+window.toggleSetting = function(key){
+  S.settings[key] = !S.settings[key];
+  persist();
+  render();
+};
+window.togglePinLock = function(){
+  if(S.settings.isPinLockEnabled){
+    S.settings.isPinLockEnabled = false;
+    S.settings.pinCode = '';
+    persist();
+    render();
+  } else {
+    S.pinSetupStage = 'new';
+    S.pinSetupFirst = '';
+    S.pinError = '';
+    render();
+  }
+};
+window.startPinChange = function(){ S.pinSetupStage='new'; S.pinSetupFirst=''; S.pinError=''; render(); };
+window.handlePinSetupInput = function(val){
+  val = val.replace(/\D/g,'').slice(0,4);
+  if(val.length<4) return;
+  if(S.pinSetupStage==='new'){
+    S.pinSetupFirst = val;
+    S.pinSetupStage = 'confirm';
+    S.pinError = '';
+    render();
+  } else if(S.pinSetupStage==='confirm'){
+    if(val===S.pinSetupFirst){
+      S.settings.pinCode = val;
+      S.settings.isPinLockEnabled = true;
+      S.pinSetupStage = null;
+      persist();
+      showNotice('کۆدی PIN بە سەرکەوتوویی هەڵگیرا.');
+    } else {
+      S.pinError = 'کۆدەکان وەک یەک نین، دووبارە هەوڵبدەوە';
+      S.pinSetupStage = 'new';
+      S.pinSetupFirst = '';
+      render();
+    }
+  }
+};
+window.exportStandaloneHTML = function(){
+  var element = document.documentElement.outerHTML;
+  var blob = new Blob(['<!DOCTYPE html>\n'+element], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'kurdish_period_tracker_standalone.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showNotice('فایلی تەواوی سەربەخۆ داگیرا! دەتوانیت بەبێ ئینتەرنێت بیکەیتەوە.');
+};
+window.resetAllData = function(){
+  if(!confirm('دڵنیایت؟ هەموو داتاکانت (سووڕەکان، تۆمارەکان، ڕێکخستنەکان) بۆ هەمیشە دەسڕدرێنەوە.')) return;
+  localStorage.removeItem('kurdish_pt_settings');
+  localStorage.removeItem('kurdish_pt_cycles');
+  localStorage.removeItem('kurdish_pt_logs');
+  location.reload();
+};
+window.obNext = obNext;
+window.obSkip = obSkip;
+window.finishOnboarding = finishOnboarding;
+window.pinPress = pinPress;
+window.pinBackspace = pinBackspace;
+window.S = S; // exposed for inline handlers reading/writing draft fields
+
+/* Re-lock when the tab is hidden/backgrounded, so reopening the app requires the PIN again */
+document.addEventListener('visibilitychange', function(){
+  if(document.hidden && S.settings.isPinLockEnabled && S.settings.onboarded && S.view==='app'){
+    S.sessionUnlocked = false;
+    S.view = 'lock';
+    S.pinInput = '';
+  }
+});
+
+render();
+})();
+</script>
+</body>
+</html>

@@ -1,1 +1,8 @@
-
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "xanmakam.jamana.std",
+    "sha256_cert_fingerprints": ["FA:C9:73:6F:35:7F:6B:8C:47:42:96:28:84:C1:26:30:6D:55:8A:54:92:91:2D:8F:1F:41:11:9D:BF:52:D6:92"]
+  }
+}]

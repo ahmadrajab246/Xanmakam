@@ -1,0 +1,28 @@
+{
+  "id": "/",
+  "name": "سووڕی مانگانە",
+  "short_name": "سووڕی مانگانە",
+  "description": "شوێنکەوتن و پێشبینیکردنی سووڕی مانگانە، بە تەواوی سەربەخۆ و بەبێ ئینتەرنێت.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FEF7F7",
+  "theme_color": "#D64D64",
+  "dir": "rtl",
+  "lang": "ckb",
+  "categories": ["health", "lifestyle"],
+  "prefer_related_applications": false,
+  "screenshots": [
+    { "src": "screenshots/screenshot-home.jpg", "sizes": "1644x3739", "type": "image/jpeg", "form_factor": "narrow", "label": "سەرەتا — ڕۆژی سووڕ و پێشبینیکردن" },
+    { "src": "screenshots/screenshot-calendar.jpg", "sizes": "1644x3747", "type": "image/jpeg", "form_factor": "narrow", "label": "ڕۆژژمێر — بینینی سووڕی پێشبینیکراو" },
+    { "src": "screenshots/screenshot-settings.jpg", "sizes": "1644x3742", "type": "image/jpeg", "form_factor": "narrow", "label": "ڕێکخستن — دۆخی تاریک و پاراستن" },
+    { "src": "screenshots/screenshot-tips.jpg", "sizes": "1644x3736", "type": "image/jpeg", "form_factor": "narrow", "label": "زانیاری — دەربارەی سووڕی مانگانە" }
+  ],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
